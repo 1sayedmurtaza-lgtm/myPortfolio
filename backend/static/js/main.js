@@ -103,7 +103,7 @@ function animateParticles() {
 animateParticles();
 
 // Rest of the app functionality
-const API = 'http://127.0.0.1:8000/api';
+const API = 'https://portfolio-application.up.railway.app/api';
 
 // Typewriter effect with sound
 function typeWriter(text, elementId, speed = 100) {
