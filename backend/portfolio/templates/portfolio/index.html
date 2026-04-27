@@ -27,9 +27,14 @@
 
     <section class="hero" id="home">
         <div class="container hero-content">
+            <p id="greeting" class="hero-greeting"></p>
             <p class="hero-tag">Hello, I'm</p>
             <h1>Sayed Murtaza</h1>
-            <p class="hero-sub">Full-Stack Developer — HTML, CSS, JS, React, Django & Python</p>
+            <p class="hero-sub">Self-taught Full-Stack Developer with a background in business — currently building
+                real-world
+                applications while working full-time. My journey into tech started with a clear goal: transition into
+                software
+                development through consistent learning and hands-on projects.</p>
             <div class="hero-btns">
                 <a href="#projects" class="btn btn-primary">View my work</a>
                 <a href="#contact" class="btn btn-outline">Contact me</a>
@@ -77,7 +82,34 @@
         </div>
     </footer>
 
-    <script src="{% static 'portfolio/main.js' %}"></script>
+    <script src="/static/portfolio/main.js"></script>
+    <script>
+        // Dynamic greeting based on time of day
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateGreeting() {
+                const now = new Date();
+                const hour = now.getHours();
+                const mins = now.getMinutes().toString().padStart(2, '0');
+                const secs = now.getSeconds().toString().padStart(2, '0');
+                const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+                const date = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+                let greet;
+                if (hour >= 5 && hour < 12) greet = '🌅 Good morning';
+                else if (hour >= 12 && hour < 17) greet = '☀️ Good afternoon';
+                else if (hour >= 17 && hour < 21) greet = '🌆 Good evening';
+                else greet = '🌙 Good night';
+
+                const greetingElement = document.getElementById('greeting');
+                if (greetingElement) {
+                    greetingElement.textContent = `${greet} — ${day}, ${date} ${hour}:${mins}:${secs}`;
+                }
+            }
+
+            updateGreeting();
+            setInterval(updateGreeting, 1000);
+        });
+    </script>
 </body>
 
 </html>

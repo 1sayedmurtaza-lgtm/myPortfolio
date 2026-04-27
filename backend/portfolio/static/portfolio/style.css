@@ -86,10 +86,30 @@ body {
 
 .hero-tag {
     color: var(--accent);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.8;
+    text-decoration: overline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+}
+
+.hero-greeting {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    opacity: 0.9;
+}
+
+.name-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     margin-bottom: 16px;
 }
 

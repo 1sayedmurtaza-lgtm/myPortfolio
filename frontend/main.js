@@ -1,4 +1,3 @@
-const API = 'http://127.0.0.1:8000/api';
 const canvas = document.getElementById('particles-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -11,28 +10,44 @@ function resize() {
 }
 resize();
 window.addEventListener('resize', resize);
+
 window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
 });
+
 window.addEventListener('mouseleave', () => {
     mouse.x = null;
     mouse.y = null;
 });
 
 function Particle() {
+    this.reset();
+}
+
+Particle.prototype.reset = function () {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.6;
-    this.vy = (Math.random() - 0.5) * 0.6;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
     this.r = Math.random() * 2 + 1;
-}
+};
 
 Particle.prototype.update = function () {
     this.x += this.vx;
     this.y += this.vy;
     if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
     if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+    if (mouse.x !== null) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+            this.x += dx / dist * 1.5;
+            this.y += dy / dist * 1.5;
+        }
+    }
 };
 
 Particle.prototype.draw = function () {
@@ -42,38 +57,36 @@ Particle.prototype.draw = function () {
     ctx.fill();
 };
 
-for (let i = 0; i < 80; i++) particles.push(new Particle());
+for (let i = 0; i < 100; i++) particles.push(new Particle());
 
 function connectParticles() {
-    const maxDist = 120;
-
-    particles.forEach(p => {
-        if (mouse.x !== null) {
-            const dx = p.x - mouse.x;
-            const dy = p.y - mouse.y;
-            const d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 150) {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - d / 150})`;
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
-            }
-        }
-    });
+    const maxDist = 130;
 
     for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
             const dy = particles[i].y - particles[j].y;
-            const d = Math.sqrt(dx * dx + dy * dy);
-            if (d < maxDist) {
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < maxDist) {
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - d / maxDist})`;
+                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - dist / maxDist})`;
                 ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+
+        if (mouse.x !== null) {
+            const dx = particles[i].x - mouse.x;
+            const dy = particles[i].y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 180) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - dist / 180})`;
+                ctx.lineWidth = 0.8;
                 ctx.stroke();
             }
         }
@@ -89,8 +102,60 @@ function animateParticles() {
 
 animateParticles();
 
-document.getElementById('year').textContent = new Date().getFullYear();
+// Rest of the app functionality
+const API = 'http://127.0.0.1:8000/api';
 
+// Typewriter effect with sound
+function typeWriter(text, elementId, speed = 100) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    el.textContent = '';
+    let i = 0;
+
+    // Create audio context for typing sound
+    let audioContext = null;
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+        console.log('Web Audio API not supported');
+    }
+
+    function playTypingSound() {
+        if (!audioContext) return;
+
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        // Random frequency for typing sound variation (more typewriter-like)
+        const frequency = 400 + Math.random() * 300; // 400-700Hz range
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+        // Quick attack and decay for typewriter sound
+        const volume = 0.05 + Math.random() * 0.05; // Random volume 0.05-0.1
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.005);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.08);
+    }
+
+    function type() {
+        if (i < text.length) {
+            el.textContent += text.charAt(i);
+            playTypingSound(); // Play sound for each character
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    type();
+}
+
+// Load projects from API
 async function loadProjects() {
     const grid = document.getElementById('projects-grid');
     try {
@@ -118,6 +183,7 @@ async function loadProjects() {
     }
 }
 
+// Load skills from API
 async function loadSkills() {
     const grid = document.getElementById('skills-grid');
     try {
@@ -145,6 +211,7 @@ async function loadSkills() {
     }
 }
 
+// Handle contact form
 async function handleContact(e) {
     e.preventDefault();
     const form = e.target;
@@ -183,7 +250,36 @@ async function handleContact(e) {
     }
 }
 
+// Initialize everything
+document.getElementById('year').textContent = new Date().getFullYear();
 document.getElementById('contact-form').addEventListener('submit', handleContact);
 
 loadProjects();
 loadSkills();
+
+// Start typing animation
+setTimeout(() => {
+    typeWriter('Sayed Murtaza', 'typed-name', 120);
+}, 1000);
+
+// Dynamic greeting based on time of day
+function updateGreeting() {
+    const now = new Date();
+    const hour = now.getHours();
+    const mins = now.getMinutes().toString().padStart(2, '0');
+    const secs = now.getSeconds().toString().padStart(2, '0');
+    const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const date = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+    let greet;
+    if (hour >= 5 && hour < 12) greet = '🌅 Good morning';
+    else if (hour >= 12 && hour < 17) greet = '☀️ Good afternoon';
+    else if (hour >= 17 && hour < 21) greet = '🌆 Good evening';
+    else greet = '🌙 Good night';
+
+    document.getElementById('greeting').textContent =
+        `${greet} — ${day}, ${date} ${hour}:${mins}:${secs}`;
+}
+
+updateGreeting();
+setInterval(updateGreeting, 1000);

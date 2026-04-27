@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sayed Murtaza — Portfolio</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
   <nav class="navbar">
     <div class="container nav-inner">
-      <span class="logo">Sayed Murtaza</span>
+      <div class="logo-wrap">
+        <span class="logo">Sayed Murtaza</span>
+        <span class="greeting" id="greeting"></span>
+      </div>
       <ul class="nav-links">
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
@@ -24,11 +29,13 @@
   <section class="hero" id="home">
     <div class="container hero-content">
       <p class="hero-tag">Hello, I'm</p>
-      <h1>Sayed Murtaza</h1>
-      <p class="hero-sub">Full-Stack Developer — HTML, CSS, JS, React, Django & Python</p>
+      <h1><span id="typed-name" style="color: white;"></span><span class="cursor">|</span></h1>
+      <p class="hero-sub">Self-taught Full-Stack Developer with a background in business — currently building real-world
+        applications while working full-time. My journey into tech started with a clear goal: transition into software
+        development through consistent learning and hands-on projects.</p>
       <div class="hero-btns">
         <a href="#projects" class="btn btn-primary">View my work</a>
-        <a href="#contact"  class="btn btn-outline">Contact me</a>
+        <a href="#contact" class="btn btn-outline">Contact me</a>
       </div>
     </div>
   </section>
@@ -58,9 +65,9 @@
       <h2 class="section-title">Contact</h2>
       <p class="section-sub">Let's work together</p>
       <form class="contact-form" id="contact-form">
-        <input  type="text"  name="name"    placeholder="Your name"    required />
-        <input  type="email" name="email"   placeholder="Your email"   required />
-        <textarea            name="message" placeholder="Your message" rows="5" required></textarea>
+        <input type="text" name="name" placeholder="Your name" required />
+        <input type="email" name="email" placeholder="Your email" required />
+        <textarea name="message" placeholder="Your message" rows="5" required></textarea>
         <button type="submit" class="btn btn-primary">Send message</button>
         <p class="form-msg" id="form-msg"></p>
       </form>
@@ -73,7 +80,8 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="main.js"></script>
   <canvas id="particles-canvas"></canvas>
 </body>
+
 </html>
