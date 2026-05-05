@@ -8,6 +8,7 @@ SECRET_KEY = 'django-insecure-change-this-in-production'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://nematy.com', 'https://www.nematy.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
