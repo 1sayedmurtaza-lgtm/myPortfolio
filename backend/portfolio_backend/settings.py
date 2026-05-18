@@ -8,7 +8,12 @@ SECRET_KEY = 'django-insecure-change-this-in-production'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://nematy.com', 'https://www.nematy.com']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://www.nematy.com',
+    'https://nematy.com',
+    'https://your-railway-url.up.railway.app',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,10 +86,13 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:5500",
     "http://localhost:5500",
+    "https://www.nematy.com",
+    "https://nematy.com",
 ]
 
 REST_FRAMEWORK = {
