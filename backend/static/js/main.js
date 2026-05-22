@@ -263,7 +263,7 @@ loadSkills();
 
 // Start typing animation
 setTimeout(() => {
-    typeWriter('Sayed Murtaza', 'typed-name', 120);
+    typeWriter('Murtaza Nematy', 'typed-name', 120);
 }, 1000);
 
 // Dynamic greeting based on time of day
