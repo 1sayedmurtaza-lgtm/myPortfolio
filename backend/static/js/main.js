@@ -1,5 +1,6 @@
 // Use relative API path for both local and production
-const API = '/api';
+
+const API = 'https://www.nematy.com/api';
 
 // Initialize particle animation when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
